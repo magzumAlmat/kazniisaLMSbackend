@@ -1,10 +1,12 @@
-const { Progress } = require('../models/Progresses');
+const {Progress}  = require('../models/Progresses');
 
 // Создать запись о прогрессе
 exports.createProgress = async (req, res) => {
   try {
-    const { status, completed_at, userId, lessonId } = req.body;
-    const progress = await Progress.create({ status, completed_at, userId, lessonId });
+    console.log('Create progresses started', req.body)
+    const { status, completed_at, user_id, lesson_id} = req.body;
+
+    const progress = await Progress.create({ status, completed_at, user_id, lesson_id });
     res.status(201).json(progress);
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -1,15 +1,18 @@
-const { Lesson } = require('../models/Lessons');
+const  Lesson  = require('../models/Lessons');
 
 // Создать урок
 exports.createLesson = async (req, res) => {
+  console.log('Create Lessaon started!',req.body);
   try {
-    const { title, description, courseId } = req.body;
-    const lesson = await Lesson.create({ title, description, courseId });
+    const { title, content, course_id } = req.body;
+    const lesson = await Lesson.create({ title, content, course_id });
+    console.log('this is lesson- ',lesson);
     res.status(201).json(lesson);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 // Получить все уроки
 exports.getAllLessons = async (req, res) => {
@@ -37,9 +40,9 @@ exports.getLessonById = async (req, res) => {
 // Обновить урок
 exports.updateLesson = async (req, res) => {
   try {
-    const { title, description, courseId } = req.body;
+    const { title, content, courseId } = req.body;
     const [updated] = await Lesson.update(
-      { title, description, courseId },
+      { title, content, courseId },
       { where: { id: req.params.id } }
     );
     if (updated) {
