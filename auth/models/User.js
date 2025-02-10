@@ -2,6 +2,7 @@ const {DataTypes} = require('sequelize')
 const sequelize = require('../../config/db')
 const Role = require('./Role')
 const Company = require('./Company')
+const bcrypt = require('bcryptjs');
 
 const User = sequelize.define('User', {
     email: {
@@ -36,4 +37,21 @@ const User = sequelize.define('User', {
 
 User.belongsTo(Role,{foreignKey:'roleId'})
 // User.belongsTo(Company,{foreignKey:'companyId'})
+
+
+
+
+User.prototype.validPassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
+  };
+  
+  // Хеширование пароля перед сохранением
+  User.beforeCreate(async (user) => {
+    if (user.password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.password, salt);
+    }
+  });
+
+  
 module.exports = User;

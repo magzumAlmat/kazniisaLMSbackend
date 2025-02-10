@@ -1,6 +1,6 @@
 const express=require('express')
 const router=express.Router()
-const {sendVerificationEmail,verifyCode, signUp, logIn,createCompany,verifyCodeInspector,addFullProfile,allCompanies,
+const {aUTH,verifyLink,sendVerificationEmail,verifyCode, signUp, logIn,createCompany,verifyCodeInspector,addFullProfile,allCompanies,
 companySearchByBin,companySearchByContactPhone,companySearchByName,companySearchByContactEmail,getAuthentificatedUserInfo
 }=require('./controllers')
 const {validateSignUp} = require('./middlewares')
@@ -8,8 +8,11 @@ const {upload} = require('./utils')
 const passport = require('passport');
 
 
-router.post('/api/auth/sendmail',sendVerificationEmail )
+router.post('/api/auth/sendmail',aUTH )
+router.post('/api/auth/login',logIn )
+// router.post('/api/auth/sendmail',sendVerificationEmail )
 router.post('/api/auth/verifycode',verifyCode )
+router.get('/api/auth/verifylink/:id',verifyLink )
 
 router.post('/api/auth/addfullprofile',passport.authenticate('jwt', {session: false}), addFullProfile)
 
