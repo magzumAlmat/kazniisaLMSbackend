@@ -8,6 +8,10 @@ const passport =require('passport')
 
 const PORT=4000;
 const app=express();
+app.use(cors());
+app.use(express.json()); // Добавьте эту строку
+// app.use(express.static(path.join(__dirname)));
+app.use(passport.initialize());
 
 const courseRouter = require('./routes/coursesRouter'); // Импортируем роутер
 const materialRoutes = require('./routes/materialsRouter');
@@ -16,16 +20,12 @@ const exerciseRoutes = require('./routes/exercisesRouter');
 const progressRoutes = require('./routes/progressesRouter');
 
 // app.use(express.json());
-app.use(cors());
 
 
-app.use(express.json()); // Добавьте эту строку
 
 
 // app.use(express.static(__dirname+'/public'))
 
-// app.use(express.static(path.join(__dirname)));
-app.use(passport.initialize());
 
 
 app.use(require('./auth/routes'))

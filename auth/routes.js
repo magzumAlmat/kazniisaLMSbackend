@@ -1,6 +1,6 @@
 const express=require('express')
 const router=express.Router()
-const {aUTH,verifyLink,sendVerificationEmail,verifyCode, signUp, logIn,createCompany,verifyCodeInspector,addFullProfile,allCompanies,
+const {checkEmail,aUTH,verifyLink,sendVerificationEmail,verifyCode, signUp, logIn,createCompany,verifyCodeInspector,addFullProfile,allCompanies,
 companySearchByBin,companySearchByContactPhone,companySearchByName,companySearchByContactEmail,getAuthentificatedUserInfo
 }=require('./controllers')
 const {validateSignUp} = require('./middlewares')
@@ -8,7 +8,9 @@ const {upload} = require('./utils')
 const passport = require('passport');
 
 
-router.post('/api/auth/sendmail',aUTH )
+router.get('/api/auth/check-email', checkEmail);
+
+router.post('/api/register',aUTH )
 router.post('/api/auth/login',logIn )
 // router.post('/api/auth/sendmail',sendVerificationEmail )
 router.post('/api/auth/verifycode',verifyCode )

@@ -217,12 +217,23 @@ const allCompanies   = async (req, res) => {
   };
 
 
+const checkEmail=async(req,res)=>{
+ 
+      const { email } = req.query;
+    
+      try {
+        const user = await User.findOne({ where: { email } }); // Ищем пользователя в базе данных
+        res.json({ exists: !!user }); // Возвращаем true, если пользователь найден
+      } catch (error) {
+        res.status(500).json({ error: 'Ошибка при проверке email' });
+      }
+}
 
 const aUTH=async(req,res)=>{
-  const { email, password, phone, name, lastname } = req.body;
-
+  const { email, password, phone, name, lastname,roleId } = req.body;
+  console.log('roleId= ',roleId)
   try {
-    const user = await User.create({ email, password, phone, name, lastname });
+    const user = await User.create({ email, password, phone, name, lastname,roleId });
 
     // Отправка письма для подтверждения
     const verificationLink = `http://localhost:4000/api/auth/verifylink/${user.id}`;
@@ -277,14 +288,11 @@ const verifyLink=async(req,res)=>{
   }
 }
 
-
-
 const logIn=async(req,res)=>{
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err || !user) {
       return res.status(401).json({ message: 'Ошибка аутентификации', info });
     }
-
     // Генерация JWT-токена
     const payload = { id: user.id, email: user.email };
     const token = jwt.sign(payload, jwtOptions.secretOrKey, { expiresIn: '1h' }); // Токен действителен 1 час
@@ -292,8 +300,6 @@ const logIn=async(req,res)=>{
     return res.status(200).json({ message: 'Успешный вход', token });
   })(req, res);
 }
-
-
 
 //верификация сразу же запускает customer в аккаунт без заполнения данных
 const verifyCode=async(req,res)=>{
@@ -683,7 +689,7 @@ const signUp = async (req, res) =>{
 // }
 
 
-module.exports={aUTH,verifyLink,
+module.exports={aUTH,verifyLink,checkEmail,
     sendVerificationEmail,allCompanies,
     verifyCode,
     signUp,
